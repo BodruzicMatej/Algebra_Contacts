@@ -18,6 +18,15 @@ class Validation
 				
 				$field = sanitize($item);
 				$value = Input::get($field);
+				if ($item == 'password'){ 
+					$password_status =  $this->password_check($value);
+					//echo $value;
+					if($password_status != true){
+						$this->addError($field, "Password must contain upper and lower cases and at least one number");
+					}
+					
+				}
+				
 				
 				if($rule === 'required' && empty($value)) {
 					$this->addError($field, "Field {$field} is required.");
@@ -78,6 +87,16 @@ class Validation
 	public function errors()
 	{
 		return $this->_errors;
+	}
+	
+	private function password_check($pass)
+	{
+		if(preg_match('~[0-9]~', $pass) == true && preg_match('~[A-Z]~', $pass) == true && preg_match('~[a-z]~', $pass) == true){
+			return true;
+		}else{
+			return false;
+		}
+			
 	}
 	
 }
